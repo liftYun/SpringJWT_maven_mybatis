@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: SpringJWT
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/jwt_test?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: ssafy
+    password: ssafy
+    hikari:
+      idle-timeout: 300000
+      minimum-idle: 3
+      maximum-pool-size: 5
+      connection-timeout: 600000
+
+
+  jwt:
+    secret: bXl2dXJ5c2VjdXJlYmFzZTY0c2VjcmV0MTIzNA==
+
+# Access/Refresh ?? ?? ?? (ms)
+jwt:
+  access:
+    expired-ms: 600000    # 10?
+  refresh:
+    expired-ms: 604800000 # 7?
+
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+
+  type-aliases-package: com.example.springjwt_maven.model.dto
+
+  configuration:
+    map-underscore-to-camel-case: true

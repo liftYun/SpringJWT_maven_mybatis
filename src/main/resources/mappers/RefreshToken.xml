@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springjwt_maven.model.dao.RefreshTokenDao">
+
+    <select id="findByUserId" parameterType="int">
+        select id, user_id, token
+        from refresh_tokens
+        where user_id = #{userId}
+    </select>
+
+    <delete id="deleteByUserId" parameterType="int">
+        delete from refresh_tokens
+        where user_id = #{userId}
+    </delete>
+
+    <insert id="save" parameterType="RefreshToken">
+        insert into refresh_tokens
+        values (id,#{userId},#{token})
+    </insert>
+    
+    <update id="update" parameterType="RefreshToken">
+        UPDATE refresh_tokens
+        SET token = #{token}
+        WHERE user_id = #{userId}
+    </update>
+</mapper>
