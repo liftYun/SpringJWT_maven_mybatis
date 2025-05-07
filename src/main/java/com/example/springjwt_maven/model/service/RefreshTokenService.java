@@ -68,7 +68,7 @@ public class RefreshTokenService {
                 .ifPresentOrElse(
                         existing -> {
                             existing.setToken(refreshToken);
-                            refreshTokenDao.save(existing);
+                            refreshTokenDao.update(existing);
                         },
                         () -> {
                             RefreshToken dto = new RefreshToken(userId, refreshToken);
