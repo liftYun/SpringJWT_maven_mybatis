@@ -49,7 +49,7 @@ public class RefreshController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
         // (여러 개라면 “ROLE_USER,ROLE_ADMIN” 식으로 합침)
-        String newAccessToken = jwtUtil.createAccessToken(userId, role);
+        String newAccessToken = jwtUtil.createAccessToken(userId, username, role);
 
         return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + newAccessToken)

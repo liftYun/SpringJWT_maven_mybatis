@@ -46,16 +46,14 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        //토큰에서 username과 role 획득
+        //토큰에서 id, username과 role 획득
+        int userId = jwtUtil.getUserId(token);
         String username = jwtUtil.getUsername(token);
         String role = jwtUtil.getRole(token);
 
-        //userEntity를 생성하여 값 set
-//        UserEntity userEntity = new UserEntity();
-//        userEntity.setUsername(username);
-//        userEntity.setPassword("tempPassword");
-//        userEntity.setRole(role);
+        //user를 생성하여 값 set
         User user = new User();
+        user.setId(userId);
         user.setUsername(username);
         user.setPassword("tempPassword");
         user.setRole(role);

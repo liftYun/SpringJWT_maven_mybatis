@@ -25,7 +25,7 @@ public class JoinService {
         boolean isExist = userDao.existsByUsername(username);
 
         if(isExist) {
-            System.out.println("이미 있는 User");
+            System.out.println("이미 있는 UserAthentication");
             return;
         }
 

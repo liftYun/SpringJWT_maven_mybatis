@@ -43,12 +43,12 @@ public class SecurityConfig {
 
         return configuration.getAuthenticationManager();
     }
+    // password 암호화 위한 Bean 등록
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
 
         return new BCryptPasswordEncoder();
     }
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -86,6 +86,7 @@ public class SecurityConfig {
 
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
+        // /login 요청 발생시 해당 요청을 가로채서 실행
         http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshTokenService), UsernamePasswordAuthenticationFilter.class);
 
         // 세션 설정

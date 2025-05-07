@@ -17,7 +17,7 @@ public class JWTUtil {
     private SecretKey secretKey;
     /**
      * -- GETTER --
-     * Access Token 만료시간(ms) 반환 (필요하면)
+     * Access Token 만료시간(ms) 반환
      */
     // access/refresh 용 만료시간 분리
     @Getter
@@ -40,6 +40,10 @@ public class JWTUtil {
 //        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
 //    }
 
+    public int getUserId(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", Integer.class);
+    }
+
     public String getUsername(String token) {
 
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username", String.class);
@@ -54,23 +58,11 @@ public class JWTUtil {
 
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
-    //기존 토큰 1개 발행
-//    public String createJwt(String username, String role, Long expiredMs) {
-//
-//        return Jwts.builder()
-//                .claim("username", username)
-//                .claim("role", role)
-//                .issuedAt(new Date(System.currentTimeMillis()))
-//                .expiration(new Date(System.currentTimeMillis() + expiredMs))
-//                .signWith(secretKey)
-//                // SecretKey와 함께 HS256을 명시
-// //                .signWith(secretKey, SignatureAlgorithm.HS256)
-//                .compact();
-//    }
 
-    public String createAccessToken(int userId, String role) {
+    public String createAccessToken(int userId, String username, String role) {
         return Jwts.builder()
                 .claim("userId", userId)
+                .claim("username", username)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + accessExpiredMs))

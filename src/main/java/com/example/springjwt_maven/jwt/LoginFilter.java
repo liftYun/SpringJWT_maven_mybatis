@@ -35,14 +35,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String username = obtainUsername(request);
         String password = obtainPassword(request);
 
-        System.out.println("LoginFilter username : " + username);
-        System.out.println("LoginFilter password : " + password);
+//        System.out.println("LoginFilter username : " + username);
+//        System.out.println("LoginFilter password : " + password);
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
-        System.out.println("authToken : " + authToken);
+//        System.out.println("authToken : " + authToken);
 
         return authenticationManager.authenticate(authToken);
     }
+
     //로그인 성공시 실행하는 메소드 (여기서 JWT를 발급)
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
@@ -52,7 +53,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
-//        String username =  customUserDetails.getUsername();
+        String username =  customUserDetails.getUsername();
         int userId = customUserDetails.getUserId();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -60,11 +61,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         GrantedAuthority auth = iterator.next();
 
         String role = auth.getAuthority();
-//        System.out.println("role : " + role);
 
-        // 기존 token 1개 발행
-//        String token = jwtUtil.createJwt(username, role, 60*60*10L);
-        String accessToken = jwtUtil.createAccessToken(userId, role);
+        String accessToken = jwtUtil.createAccessToken(userId, username, role);
         String refreshToken = jwtUtil.createRefreshToken(userId);
 
         // Refresh Token 을 DB 혹은 Redis 등에 저장 (토큰 회수/무효화 위해)
@@ -80,6 +78,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     //로그인 실패시 실행하는 메소드
+    // 추후 추가적인 실패시 기능 추가 가능
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
 
