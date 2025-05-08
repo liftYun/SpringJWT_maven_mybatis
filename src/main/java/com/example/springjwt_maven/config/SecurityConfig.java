@@ -3,12 +3,13 @@ package com.example.springjwt_maven.config;
 import com.example.springjwt_maven.jwt.JWTFilter;
 import com.example.springjwt_maven.jwt.JWTUtil;
 import com.example.springjwt_maven.jwt.LoginFilter;
-import com.example.springjwt_maven.model.service.RefreshTokenService;
+import com.example.springjwt_maven.service.RefreshTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
@@ -23,6 +24,8 @@ import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
+// 메서드 레벨 @PreAuthorize 를 쓰려면 이 어노테이션을 추가
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입

@@ -1,4 +1,4 @@
-package com.example.springjwt_maven.model.service;
+package com.example.springjwt_maven.service;
 
 import com.example.springjwt_maven.dto.in.IssueRefreshTokenDto;
 import com.example.springjwt_maven.dto.out.RefreshTokenResponseDto;

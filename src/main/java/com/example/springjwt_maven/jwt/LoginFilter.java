@@ -1,7 +1,7 @@
 package com.example.springjwt_maven.jwt;
 
 import com.example.springjwt_maven.dto.out.CustomUserDetails;
-import com.example.springjwt_maven.model.service.RefreshTokenService;
+import com.example.springjwt_maven.service.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

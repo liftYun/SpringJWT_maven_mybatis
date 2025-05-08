@@ -1,14 +1,12 @@
 package com.example.springjwt_maven.vo.out;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class UserDetailResponseVo {
     private int id;
     private String username;

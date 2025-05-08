@@ -1,10 +1,12 @@
 package com.example.springjwt_maven.controller;
 
-import com.example.springjwt_maven.annotation.UserAthentication;
+import com.example.springjwt_maven.annotation.UserAuth;
+import com.example.springjwt_maven.dto.out.CustomUserDetails;
+import com.example.springjwt_maven.entity.UserEntity;
 import com.example.springjwt_maven.jwt.JWTUtil;
-import com.example.springjwt_maven.vo.out.UserDetailResponseVo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,9 +46,12 @@ public class MainController {
         return "Main Controller / name : " + name  + ", role : " + role;
     }
 
+    // @PreAuthorize 사용으로 허가하고자 하는 ROLE 지정가능...
+    // 커스텀 어노테이션 테스트 원할 시 해당 어노테이션 삭제 요망
+    @PreAuthorize("hasRole('ADMIN')")
     // 커스텀 어노테이션으로 권한 인가작업 테스트 코드
-    @GetMapping("/annotationTestUser")
-    public String annotationTestUser(@UserAthentication UserDetailResponseVo user, HttpServletRequest request, HttpServletResponse response) {
+    @GetMapping("/userAuthTest")
+    public String annotationTestUser(@UserAuth UserEntity user, HttpServletRequest request, HttpServletResponse response) {
         String authorization = request.getHeader("Authorization");
 
         String token = authorization.split(" ")[1];
@@ -57,6 +62,8 @@ public class MainController {
         System.out.println("token : "+token);
 
         System.out.println("username : " + username + ", role : " + role);
+
+        System.out.println("user : " + user);
 
         if(user == null) {
             response.setStatus(403);

@@ -16,8 +16,8 @@ import java.lang.annotation.Target;
  *
  * (expression = "#this == 'anonymousUser' ? null : member")은 SpEL(Spring Expression Language) 표현식
  * 만약 현재의 객체 #this가 스프링 시큐리티에서 인증되지 않은 사용자를 나타내는 특별한 값인 anonymousUser라면, null을 반환
- * 아니면 Authentication.getPrincipal()를 통해서 가져올 수 있는 UserDetails 객체의 member 필드를 가져올 수 있음
+ * 아니면 Authentication.getPrincipal()를 통해서 가져올 수 있는 UserDetails 객체의 user 필드를 가져올 수 있음
  */
-@AuthenticationPrincipal(expression = "#this == 'anonymousUser' ? null : user")
-public @interface UserAthentication {
+@AuthenticationPrincipal(expression = "#this == 'anonymousUser' ? null : userEntity")
+public @interface UserAuth {
 }

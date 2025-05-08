@@ -19,6 +19,10 @@
         insert into refresh_tokens
         values (id,#{userId},#{token})
     </insert>
+<!--    <insert id="save" parameterType="RefreshTokenEntity">-->
+<!--        insert into refresh_tokens-->
+<!--        values (id,#{userId},#{token})-->
+<!--    </insert>-->
     
     <update id="update" parameterType="com.example.springjwt_maven.entity.RefreshTokenEntity">
         UPDATE refresh_tokens

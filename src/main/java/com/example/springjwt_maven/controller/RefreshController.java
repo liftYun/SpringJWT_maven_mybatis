@@ -1,8 +1,8 @@
 package com.example.springjwt_maven.controller;
 
 import com.example.springjwt_maven.jwt.JWTUtil;
-import com.example.springjwt_maven.model.service.CustomUserDetailsService;
-import com.example.springjwt_maven.model.service.RefreshTokenService;
+import com.example.springjwt_maven.service.CustomUserDetailsService;
+import com.example.springjwt_maven.service.RefreshTokenService;
 import io.jsonwebtoken.Claims;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

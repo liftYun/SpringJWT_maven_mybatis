@@ -1,6 +1,6 @@
 package com.example.springjwt_maven.controller;
 
-import com.example.springjwt_maven.model.service.JoinService;
+import com.example.springjwt_maven.service.JoinService;
 import com.example.springjwt_maven.vo.in.RegistRequestVo;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
