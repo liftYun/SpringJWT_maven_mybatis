@@ -1,7 +1,7 @@
 package com.example.springjwt_maven.jwt;
 
-import com.example.springjwt_maven.model.dto.CustomUserDetails;
-import com.example.springjwt_maven.model.dto.User;
+import com.example.springjwt_maven.dto.in.UserDetailRequestDto;
+import com.example.springjwt_maven.dto.out.CustomUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -52,14 +52,14 @@ public class JWTFilter extends OncePerRequestFilter {
         String role = jwtUtil.getRole(token);
 
         //user를 생성하여 값 set
-        User user = new User();
-        user.setId(userId);
-        user.setUsername(username);
-        user.setPassword("tempPassword");
-        user.setRole(role);
+        UserDetailRequestDto userDetailRequestDto = new UserDetailRequestDto();
+        userDetailRequestDto.setId(userId);
+        userDetailRequestDto.setUsername(username);
+        userDetailRequestDto.setPassword("tempPassword");
+        userDetailRequestDto.setRole(role);
 
         //UserDetails에 회원 정보 객체 담기
-        CustomUserDetails customUserDetails = new CustomUserDetails(user);
+        CustomUserDetails customUserDetails = new CustomUserDetails(UserDetailRequestDto.from(userDetailRequestDto));
 
         //스프링 시큐리티 인증 토큰 생성
         Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());

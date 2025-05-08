@@ -1,5 +1,6 @@
-package com.example.springjwt_maven.model.dto;
+package com.example.springjwt_maven.dto.out;
 
+import com.example.springjwt_maven.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,11 +9,11 @@ import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final User user;
+    private final UserEntity userEntity;
 
-    public CustomUserDetails(User user) {
+    public CustomUserDetails(UserEntity userEntity) {
 
-        this.user = user;
+        this.userEntity = userEntity;
     }
 
     @Override
@@ -24,26 +25,26 @@ public class CustomUserDetails implements UserDetails {
             @Override
             public String getAuthority() {
 
-                return user.getRole();
+                return userEntity.getRole();
             }
         });
 
         return collection;
     }
-    public User getUser() {
-        return this.user;
+    public UserEntity getUserEntity() {
+        return this.userEntity;
     }
 
-    public int getUserId() { return user.getId(); }
+    public int getUserId() { return userEntity.getId(); }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return userEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return userEntity.getUsername();
     }
 
     @Override

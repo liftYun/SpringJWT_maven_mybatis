@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.springjwt_maven.model.dao.RefreshTokenDao">
+<mapper namespace="com.example.springjwt_maven.repository.RefreshTokenDao">
 
     <select id="findByUserId" parameterType="int">
         select id, user_id, token
@@ -15,12 +15,12 @@
         where user_id = #{userId}
     </delete>
 
-    <insert id="save" parameterType="RefreshToken">
+    <insert id="save" parameterType="com.example.springjwt_maven.entity.RefreshTokenEntity">
         insert into refresh_tokens
         values (id,#{userId},#{token})
     </insert>
     
-    <update id="update" parameterType="RefreshToken">
+    <update id="update" parameterType="com.example.springjwt_maven.entity.RefreshTokenEntity">
         UPDATE refresh_tokens
         SET token = #{token}
         WHERE user_id = #{userId}

@@ -1,7 +1,7 @@
 package com.example.springjwt_maven.controller;
 
-import com.example.springjwt_maven.model.dto.JoinDTO;
 import com.example.springjwt_maven.model.service.JoinService;
+import com.example.springjwt_maven.vo.in.RegistRequestVo;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,9 +18,9 @@ public class JoinController {
     }
 
     @PutMapping("/join")
-    public String joinProcess(JoinDTO joinDTO) {
+    public String joinProcess(RegistRequestVo vo) {
 
-        joinService.joinProcess(joinDTO);
+        joinService.joinProcess(RegistRequestVo.from(vo));
 
         return "ok";
     }

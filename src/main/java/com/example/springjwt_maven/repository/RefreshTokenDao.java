@@ -1,6 +1,6 @@
-package com.example.springjwt_maven.model.dao;
+package com.example.springjwt_maven.repository;
 
-import com.example.springjwt_maven.model.dto.RefreshToken;
+import com.example.springjwt_maven.entity.RefreshTokenEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -13,17 +13,17 @@ public interface RefreshTokenDao {
     /**
      * refresh token 저장
      */
-    void save(RefreshToken refreshToken);
+    void save(RefreshTokenEntity refreshTokenEntity);
 
     /**
      * refresh token 갱신
      */
-    void update(RefreshToken refreshToken);
+    void update(RefreshTokenEntity refreshTokenEntity);
 
     /**
      * 주어진 username 으로 저장된 RefreshToken 조회
      */
-    Optional<RefreshToken> findByUserId(int userId);
+    Optional<RefreshTokenEntity> findByUserId(int userId);
 
     /**
      * 주어진 username 으로 저장된 RefreshToken 레코드를 삭제

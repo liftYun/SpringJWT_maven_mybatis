@@ -1,8 +1,8 @@
 package com.example.springjwt_maven.model.service;
 
-import com.example.springjwt_maven.model.dao.UserDao;
-import com.example.springjwt_maven.model.dto.JoinDTO;
-import com.example.springjwt_maven.model.dto.User;
+import com.example.springjwt_maven.dto.in.RegistRequestDto;
+import com.example.springjwt_maven.dto.out.RegistResponseDto;
+import com.example.springjwt_maven.repository.UserDao;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +16,10 @@ public class JoinService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public void joinProcess(JoinDTO joinDTO) {
+    public void joinProcess(RegistResponseDto registResponseDto) {
 
-        String username = joinDTO.getUsername();
-        String password = joinDTO.getPassword();
-//        System.out.println("username: " + username + " password: " + password);
+        String username = registResponseDto.getUsername();
+        String password = registResponseDto.getPassword();
 
         boolean isExist = userDao.existsByUsername(username);
 
@@ -29,12 +28,12 @@ public class JoinService {
             return;
         }
 
-        User data = new User();
+        RegistRequestDto registUserData = new RegistRequestDto();
 
-        data.setUsername(username);
-        data.setPassword(bCryptPasswordEncoder.encode(password));
-        data.setRole("ROLE_ADMIN");
+        registUserData.setUsername(username);
+        registUserData.setPassword(bCryptPasswordEncoder.encode(password));
+        registUserData.setRole("ROLE_ADMIN");
 
-        userDao.registUser(data);
+        userDao.registUser(RegistRequestDto.from(registUserData));
     }
 }

@@ -2,7 +2,7 @@ package com.example.springjwt_maven.controller;
 
 import com.example.springjwt_maven.annotation.UserAthentication;
 import com.example.springjwt_maven.jwt.JWTUtil;
-import com.example.springjwt_maven.model.dto.User;
+import com.example.springjwt_maven.vo.out.UserDetailResponseVo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
@@ -46,7 +46,7 @@ public class MainController {
 
     // 커스텀 어노테이션으로 권한 인가작업 테스트 코드
     @GetMapping("/annotationTestUser")
-    public String annotationTestUser(@UserAthentication User user, HttpServletRequest request, HttpServletResponse response) {
+    public String annotationTestUser(@UserAthentication UserDetailResponseVo user, HttpServletRequest request, HttpServletResponse response) {
         String authorization = request.getHeader("Authorization");
 
         String token = authorization.split(" ")[1];

@@ -1,8 +1,10 @@
 package com.example.springjwt_maven.model.service;
 
+import com.example.springjwt_maven.dto.in.IssueRefreshTokenDto;
+import com.example.springjwt_maven.dto.out.RefreshTokenResponseDto;
+import com.example.springjwt_maven.entity.RefreshTokenEntity;
 import com.example.springjwt_maven.jwt.JWTUtil;
-import com.example.springjwt_maven.model.dao.RefreshTokenDao;
-import com.example.springjwt_maven.model.dto.RefreshToken;
+import com.example.springjwt_maven.repository.RefreshTokenDao;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -23,32 +25,17 @@ public class RefreshTokenService {
      * JWTUtil.isExpired로 만료 여부까지 검사합니다.
      */
     public boolean isValid(int userId, String refreshToken) {
-        Optional<RefreshToken> tokenOpt = refreshTokenDao.findByUserId(userId);
+        Optional<RefreshTokenEntity> tokenOpt = refreshTokenDao.findByUserId(userId);
         if (tokenOpt.isEmpty()) {
             return false;
         }
-        RefreshToken stored = tokenOpt.get();
+        RefreshTokenResponseDto stored = RefreshTokenResponseDto.from(tokenOpt.get());
         // 1) 문자열 일치 여부
         if (!stored.getToken().equals(refreshToken)) {
             return false;
         }
         // 2) 만료 여부 검사
         return !jwtUtil.isExpired(refreshToken);
-    }
-
-    /**
-     * 로그인 시 새로 발급된 refresh token을 저장
-     */
-    public void saveToken(int userId, String refreshToken) {
-        // 이미 있으면 갱신, 없으면 신규 저장
-        refreshTokenDao.findByUserId(userId)
-                .ifPresentOrElse(
-                        t -> {
-                            t.setToken(refreshToken);
-                            refreshTokenDao.update(t);
-                        },
-                        () -> refreshTokenDao.save(new RefreshToken(userId, refreshToken))
-                );
     }
 
     /**
@@ -71,8 +58,8 @@ public class RefreshTokenService {
                             refreshTokenDao.update(existing);
                         },
                         () -> {
-                            RefreshToken dto = new RefreshToken(userId, refreshToken);
-                            refreshTokenDao.save(dto);
+//                            IssueRefreshTokenDto dto = new IssueRefreshTokenDto(userId, refreshToken);
+                            refreshTokenDao.save(IssueRefreshTokenDto.from(new IssueRefreshTokenDto(0,userId, refreshToken)));
                         }
                 );
     }
