@@ -11,6 +11,7 @@ public interface UserDao {
     boolean existsByUsername(String username);
 
     UserEntity findByUsername(String username);
+    UserEntity findByUserId(int userid);
 
     void registUser(UserEntity userEntity);
 }

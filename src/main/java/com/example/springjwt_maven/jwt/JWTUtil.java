@@ -1,6 +1,7 @@
 package com.example.springjwt_maven.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,9 +56,14 @@ public class JWTUtil {
     }
 
     public Boolean isExpired(String token) {
-
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        try {
+            return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        } catch (ExpiredJwtException e) {
+            e.printStackTrace();
+            return true;
+        }
     }
+
 
     public String createAccessToken(int userId, String username, String role) {
         return Jwts.builder()
@@ -71,7 +77,6 @@ public class JWTUtil {
     }
 
     public String createRefreshToken(int userId) {
-        Date now = new Date();
         return Jwts.builder()
                 .claim("userId", userId)
                 .issuedAt(new Date(System.currentTimeMillis()))

@@ -4,6 +4,7 @@ import com.example.springjwt_maven.dto.in.UserDetailRequestDto;
 import com.example.springjwt_maven.dto.out.CustomUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,6 +43,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
             System.out.println("token expired");
             filterChain.doFilter(request, response);
+
 
             return;
         }

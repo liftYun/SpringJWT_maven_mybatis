@@ -29,13 +29,22 @@ public class RefreshTokenService {
         if (tokenOpt.isEmpty()) {
             return false;
         }
+        String storedToken = tokenOpt.get().getToken();
+        System.out.println("[isValid] cookieToken='"+ refreshToken +"'");
+        System.out.println("[isValid] storedToken='"+ storedToken +"'");
+        System.out.println("[isValid] equals? " + storedToken.equals(refreshToken));
         RefreshTokenResponseDto stored = RefreshTokenResponseDto.from(tokenOpt.get());
         // 1) 문자열 일치 여부
         if (!stored.getToken().equals(refreshToken)) {
             return false;
         }
         // 2) 만료 여부 검사
-        return !jwtUtil.isExpired(refreshToken);
+        if(jwtUtil.isExpired(refreshToken)){
+            refreshTokenDao.deleteByUserId(userId);
+            return false;
+        }
+        return true;
+//        return !jwtUtil.isExpired(refreshToken);
     }
 
     /**
@@ -63,4 +72,8 @@ public class RefreshTokenService {
                         }
                 );
     }
+    /**
+     * 토큰 탈취 대비한 블랙리스트 생성
+     */
+
 }

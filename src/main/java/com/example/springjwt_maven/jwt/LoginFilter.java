@@ -70,11 +70,19 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         response.addHeader("Authorization", "Bearer " + accessToken);
         // 보안성을 위해 HttpOnly Cookie 로 발급하는 것을 권장
-        Cookie cookie = new Cookie("refreshToken", refreshToken);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge((int)(jwtUtil.getRefreshExpiredMs() / 1000));
-        response.addCookie(cookie);
+        // SPA(Single Page Application)를 가정하여 메모리 저장 방식(Java Script 변수 저장)을 사용
+        // 새로고침 시에 사라지므로 아래와 같이 쿠키 저장을 하기도 함.
+//        Cookie accessCookie = new Cookie("accessToken", accessToken);
+//        accessCookie.setHttpOnly(true);
+//        accessCookie.setPath("/");
+//        accessCookie.setMaxAge((int)(jwtUtil.getAccessExpiredMs() / 1000));
+//        response.addCookie(accessCookie);
+
+        Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setPath("/");
+        refreshCookie.setMaxAge((int)(jwtUtil.getRefreshExpiredMs() / 1000));
+        response.addCookie(refreshCookie);
     }
 
     //로그인 실패시 실행하는 메소드

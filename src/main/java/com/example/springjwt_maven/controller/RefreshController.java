@@ -4,6 +4,9 @@ import com.example.springjwt_maven.jwt.JWTUtil;
 import com.example.springjwt_maven.service.CustomUserDetailsService;
 import com.example.springjwt_maven.service.RefreshTokenService;
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,21 +38,39 @@ public class RefreshController {
 
         // 1) 서명+만료 검사
         Claims claims = jwtUtil.parseClaims(refreshToken);
-        String username = claims.getSubject();
-        int userId = Integer.parseInt(claims.getId());
-
+//        String username = claims.getSubject();
+//        int userId = Integer.parseInt(claims.getId());
+//        int userId = Integer.parseInt(claims.getSubject());
+        Integer userId = claims.get("userId", Integer.class);
+        System.out.println("UserId : "+ userId);
+//        refreshTokenService.deleteToken(userId);
         // 2) DB에 저장된 토큰과 일치하는지 확인
         if (!refreshTokenService.isValid(userId, refreshToken)) {
+            // refreshToken이 DB에 저장된 값과 다르므로 예외 상황
+            System.out.println("Before to delete Token : "+userId);
+            // 저장된 토큰 삭제
+            refreshTokenService.deleteToken(userId);
+            System.out.println("delete RefreshToken");
+            // 이후 방침에 따라 추가 인증 등 확인 요망
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
+
         // 3) UserDetailsService 로부터 권한 조회
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+//        UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = customUserDetailsService.loadUserByUserId(userId);
         String role = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
+//         Refresh Token Rotation을 위해 DB에서 refresh Token 삭제
+        refreshTokenService.deleteToken(userId);
         // (여러 개라면 “ROLE_USER,ROLE_ADMIN” 식으로 합침)
-        String newAccessToken = jwtUtil.createAccessToken(userId, username, role);
+//        String newAccessToken = jwtUtil.createAccessToken(userId, username, role);
+        String newAccessToken = jwtUtil.createAccessToken(userId, userDetails.getUsername(), role);
+        String newRefreshToken = jwtUtil.createRefreshToken(userId);
+
+        refreshTokenService.save(userId, newRefreshToken);
 
         return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + newAccessToken)
