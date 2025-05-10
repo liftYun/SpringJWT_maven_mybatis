@@ -4,6 +4,7 @@ import com.example.springjwt_maven.entity.RefreshTokenEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Repository
@@ -13,7 +14,7 @@ public interface RefreshTokenDao {
     /**
      * refresh token 저장
      */
-    void save(RefreshTokenEntity refreshTokenEntity);
+    void insertRefreshToken(int userId, String refreshToken, Date expiresAt);
 
     /**
      * refresh token 갱신

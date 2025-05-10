@@ -14,7 +14,12 @@
         select id, username, password, role
         from users
         where username = #{username}
-<!--        and password = #{password}-->
+    </select>
+
+    <select id="findByUserId" parameterType="int" resultType="com.example.springjwt_maven.entity.UserEntity">
+        select id, username, password, role
+        from users
+        where id = #{userId}
     </select>
 
     <insert id="registUser" parameterType="com.example.springjwt_maven.entity.UserEntity">

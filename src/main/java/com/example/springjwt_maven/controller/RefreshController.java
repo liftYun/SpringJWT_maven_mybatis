@@ -34,16 +34,12 @@ public class RefreshController {
 
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(
-            @CookieValue(name="refreshToken", required=true) String refreshToken) {
+            @CookieValue(name="refreshToken", required=true) String refreshToken, HttpServletResponse response) {
 
         // 1) 서명+만료 검사
         Claims claims = jwtUtil.parseClaims(refreshToken);
-//        String username = claims.getSubject();
-//        int userId = Integer.parseInt(claims.getId());
-//        int userId = Integer.parseInt(claims.getSubject());
         Integer userId = claims.get("userId", Integer.class);
         System.out.println("UserId : "+ userId);
-//        refreshTokenService.deleteToken(userId);
         // 2) DB에 저장된 토큰과 일치하는지 확인
         if (!refreshTokenService.isValid(userId, refreshToken)) {
             // refreshToken이 DB에 저장된 값과 다르므로 예외 상황
@@ -58,19 +54,21 @@ public class RefreshController {
 
 
         // 3) UserDetailsService 로부터 권한 조회
-//        UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
         UserDetails userDetails = customUserDetailsService.loadUserByUserId(userId);
         String role = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
+                // (여러 개라면 “ROLE_USER,ROLE_ADMIN” 식으로 합침)
                 .collect(Collectors.joining(","));
-//         Refresh Token Rotation을 위해 DB에서 refresh Token 삭제
-        refreshTokenService.deleteToken(userId);
-        // (여러 개라면 “ROLE_USER,ROLE_ADMIN” 식으로 합침)
-//        String newAccessToken = jwtUtil.createAccessToken(userId, username, role);
-        String newAccessToken = jwtUtil.createAccessToken(userId, userDetails.getUsername(), role);
         String newRefreshToken = jwtUtil.createRefreshToken(userId);
 
-        refreshTokenService.save(userId, newRefreshToken);
+        refreshTokenService.saveToken(userId, newRefreshToken);
+        Cookie cookie = new Cookie("refreshToken", newRefreshToken);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge((int)(jwtUtil.getRefreshExpiredMs()/1000));
+        response.addCookie(cookie);
+
+        String newAccessToken = jwtUtil.createAccessToken(userId, userDetails.getUsername(), role);
 
         return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + newAccessToken)

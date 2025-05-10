@@ -64,9 +64,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String accessToken = jwtUtil.createAccessToken(userId, username, role);
         String refreshToken = jwtUtil.createRefreshToken(userId);
+        System.out.println("loginFiler's refreshToken= " + refreshToken);
 
         // Refresh Token 을 DB 혹은 Redis 등에 저장 (토큰 회수/무효화 위해)
-        refreshTokenService.save(userId, refreshToken);
+        refreshTokenService.saveToken(userId, refreshToken);
 
         response.addHeader("Authorization", "Bearer " + accessToken);
         // 보안성을 위해 HttpOnly Cookie 로 발급하는 것을 권장
@@ -83,6 +84,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         refreshCookie.setPath("/");
         refreshCookie.setMaxAge((int)(jwtUtil.getRefreshExpiredMs() / 1000));
         response.addCookie(refreshCookie);
+        System.out.println("After refreshToken= " + refreshToken);
     }
 
     //로그인 실패시 실행하는 메소드

@@ -2,6 +2,7 @@ package com.example.springjwt_maven.jwt;
 
 import com.example.springjwt_maven.dto.in.UserDetailRequestDto;
 import com.example.springjwt_maven.dto.out.CustomUserDetails;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -40,12 +41,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // 토큰 소멸 시간 검증
         if(jwtUtil.isExpired(token)) {
-
-            System.out.println("token expired");
-            filterChain.doFilter(request, response);
-
-
-            return;
+            throw new JwtException("Access token expired");
         }
 
         //토큰에서 id, username과 role 획득
