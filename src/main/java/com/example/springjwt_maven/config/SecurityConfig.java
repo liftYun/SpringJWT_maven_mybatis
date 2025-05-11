@@ -82,7 +82,7 @@ public class SecurityConfig {
 
         // 경로별 인가 작업
         http.authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/login","/","/join", "/refresh").permitAll()
+                .requestMatchers("/login","/","/join", "/refresh", "/logout").permitAll()
                 .requestMatchers("/admin/*").hasRole("ADMIN")
                 .requestMatchers("/user/*").hasRole("USER")
                 .anyRequest().authenticated());
