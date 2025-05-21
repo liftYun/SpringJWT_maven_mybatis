@@ -12,7 +12,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RegistResponseDto {
     private int id;
+    private String nickname;
     private String username;
+    private String userEmail;
     private String password;
+    private String phoneNumber;
     private String role;
 }

@@ -6,24 +6,24 @@
 
     <select id="existsByUsername" parameterType="String" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM users
+        FROM member
         WHERE username = #{username}
     </select>
 
     <select id="findByUsername" parameterType="String" resultType="com.example.springjwt_maven.entity.UserEntity">
         select id, username, password, role
-        from users
+        from member
         where username = #{username}
     </select>
 
     <select id="findByUserId" parameterType="int" resultType="com.example.springjwt_maven.entity.UserEntity">
         select id, username, password, role
-        from users
+        from member
         where id = #{userId}
     </select>
 
     <insert id="registUser" parameterType="com.example.springjwt_maven.entity.UserEntity">
-        insert into users
-        values (id,#{username},#{password},"ROLE_ADMIN")
+        insert into member
+        values (id,#{nickname},#{username},#{userEmail},#{password},#{phoneNumber},"ROLE_USER")
     </insert>
 </mapper>
