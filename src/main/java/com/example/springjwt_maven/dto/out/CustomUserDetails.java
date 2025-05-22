@@ -37,6 +37,8 @@ public class CustomUserDetails implements UserDetails {
 
     public int getUserId() { return userEntity.getId(); }
 
+    public String getUserEmail() { return  userEntity.getUserEmail(); }
+
     @Override
     public String getPassword() {
         return userEntity.getPassword();

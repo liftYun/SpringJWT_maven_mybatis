@@ -12,6 +12,7 @@ public interface UserDao {
 
     UserEntity findByUsername(String username);
     UserEntity findByUserId(int userid);
+    UserEntity findByUserEmail(String userEmail);
 
     void registUser(UserEntity userEntity);
 }

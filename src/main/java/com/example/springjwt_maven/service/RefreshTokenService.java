@@ -42,7 +42,7 @@ public class RefreshTokenService {
         }
         RefreshTokenEntity entity = tokenOpt.get();
 
-        String storedToken = tokenOpt.get().getToken();
+//        String storedToken = tokenOpt.get().getToken();
 //        System.out.println("[isValid] cookieToken='"+ refreshToken +"'");
 //        System.out.println("[isValid] storedToken='"+ storedToken +"'");
 //        System.out.println("[isValid] equals? " + storedToken.equals(refreshToken));

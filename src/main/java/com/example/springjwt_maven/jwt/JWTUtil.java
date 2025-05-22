@@ -65,10 +65,10 @@ public class JWTUtil {
     }
 
 
-    public String createAccessToken(int userId, String username, String role) {
+    public String createAccessToken(int userId, String userEmail, String role) {
         return Jwts.builder()
                 .claim("userId", userId)
-                .claim("username", username)
+                .claim("username", userEmail)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + accessExpiredMs))

@@ -32,13 +32,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-        String username = obtainUsername(request);
+//        String username = obtainUsername(request);
+        String userEmail = obtainUsername(request);
         String password = obtainPassword(request);
 
 //        System.out.println("LoginFilter username : " + username);
 //        System.out.println("LoginFilter password : " + password);
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userEmail, password, null);
 //        System.out.println("authToken : " + authToken);
 
         return authenticationManager.authenticate(authToken);
@@ -53,7 +54,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        String username =  customUserDetails.getUsername();
+//        String username =  customUserDetails.getUsername();
+        String userEmail = customUserDetails.getUserEmail();
         int userId = customUserDetails.getUserId();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -62,7 +64,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-        String accessToken = jwtUtil.createAccessToken(userId, username, role);
+        String accessToken = jwtUtil.createAccessToken(userId, userEmail, role);
         String refreshToken = jwtUtil.createRefreshToken(userId);
         System.out.println("loginFiler's refreshToken= " + refreshToken);
 

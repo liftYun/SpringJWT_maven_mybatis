@@ -29,9 +29,21 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return null;
     }
+
     public UserDetails loadUserByUserId(int userId) throws UsernameNotFoundException {
 
         UserEntity userData = userDao.findByUserId(userId);
+
+        if(userData != null) {
+            return new CustomUserDetails(userData);
+        }
+
+        return null;
+    }
+
+    public UserDetails loadUserByUserEmail(String userEmail) throws UsernameNotFoundException {
+
+        UserEntity userData = userDao.findByUserEmail(userEmail);
 
         if(userData != null) {
             return new CustomUserDetails(userData);

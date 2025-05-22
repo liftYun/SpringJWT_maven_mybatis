@@ -10,15 +10,21 @@ import lombok.*;
 @Builder
 public class UserDetailRequestDto {
     private int id;
+    private String nickname;
     private String username;
+    private String userEmail;
     private String password;
+    private String phoneNumber;
     private String role;
 
     public static UserEntity from(UserDetailRequestDto dto){
         return UserEntity.builder()
                 .id(dto.id)
+                .userEmail(dto.userEmail)
                 .username(dto.username)
+                .userEmail(dto.userEmail)
                 .password(dto.password)
+                .phoneNumber(dto.phoneNumber)
                 .role(dto.role)
                 .build();
     }
