@@ -17,8 +17,13 @@ public class JoinController {
 
     @PostMapping("/join")
     public String joinProcess(@RequestBody RegistRequestVo vo) {
+
+        System.out.println("JoinController's nickname : "+vo.getNickname());
         System.out.println("JoinController's username : "+vo.getUsername());
+        System.out.println("JoinController's userEmail : "+vo.getUserEmail());
         System.out.println("JoinController's userPassword : "+vo.getPassword());
+        System.out.println("JoinController's phoneNumber : "+vo.getPhoneNumber());
+
         joinService.joinProcess(RegistRequestVo.from(vo));
 
         return "ok";

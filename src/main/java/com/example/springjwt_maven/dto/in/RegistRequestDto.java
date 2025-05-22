@@ -4,7 +4,7 @@ import com.example.springjwt_maven.entity.UserEntity;
 import com.example.springjwt_maven.vo.in.RegistRequestVo;
 import lombok.*;
 
-@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -28,4 +28,6 @@ public class RegistRequestDto {
                 .role(dto.role)
                 .build();
     }
+
+
 }
