@@ -12,6 +12,7 @@ import org.apache.ibatis.type.Alias;
 @Builder
 public class UserEntity {
     private int id;
+    private String uuid;
     private String nickname;
     private String username;
     private String userEmail;

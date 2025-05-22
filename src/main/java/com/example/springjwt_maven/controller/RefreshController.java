@@ -38,14 +38,16 @@ public class RefreshController {
 
         // 1) 서명+만료 검사
         Claims claims = jwtUtil.parseClaims(refreshToken);
-        Integer userId = claims.get("userId", Integer.class);
-        System.out.println("UserId : "+ userId);
+//        Integer userId = claims.get("userId", Integer.class);
+        String uuid = claims.get("uuid", String.class);
+        System.out.println("Refresh Controller's uuid : "+ uuid);
+
         // 2) DB에 저장된 토큰과 일치하는지 확인
-        if (!refreshTokenService.isValid(userId, refreshToken)) {
+        if (!refreshTokenService.isValid(uuid, refreshToken)) {
             // refreshToken이 DB에 저장된 값과 다르므로 예외 상황
-            System.out.println("Before to delete Token : "+userId);
+            System.out.println("Before to delete Token : "+uuid);
             // 저장된 토큰 삭제
-            refreshTokenService.deleteToken(userId);
+            refreshTokenService.deleteToken(uuid);
             System.out.println("delete RefreshToken");
             // 이후 방침에 따라 추가 인증 등 확인 요망
 
@@ -54,21 +56,21 @@ public class RefreshController {
 
 
         // 3) UserDetailsService 로부터 권한 조회
-        UserDetails userDetails = customUserDetailsService.loadUserByUserId(userId);
+        UserDetails userDetails = customUserDetailsService.loadUserByUuid(uuid);
         String role = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 // (여러 개라면 “ROLE_USER,ROLE_ADMIN” 식으로 합침)
                 .collect(Collectors.joining(","));
-        String newRefreshToken = jwtUtil.createRefreshToken(userId);
+        String newRefreshToken = jwtUtil.createRefreshToken(uuid);
 
-        refreshTokenService.saveToken(userId, newRefreshToken);
+        refreshTokenService.saveToken(uuid, newRefreshToken);
         Cookie cookie = new Cookie("refreshToken", newRefreshToken);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setMaxAge((int)(jwtUtil.getRefreshExpiredMs()/1000));
         response.addCookie(cookie);
 
-        String newAccessToken = jwtUtil.createAccessToken(userId, userDetails.getUsername(), role);
+        String newAccessToken = jwtUtil.createAccessToken(uuid, userDetails.getUsername(), role);
 
         return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + newAccessToken)

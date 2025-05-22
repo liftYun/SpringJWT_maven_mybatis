@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface UserDao {
     boolean existsByUsername(String username);
 
-    UserEntity findByUsername(String username);
+    UserEntity findByUuid(String uuid);
     UserEntity findByUserId(int userid);
     UserEntity findByUserEmail(String userEmail);
 

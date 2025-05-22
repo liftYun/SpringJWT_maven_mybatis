@@ -14,7 +14,7 @@ import java.util.Date;
 @Builder
 public class RefreshTokenEntity {
     private int id;
-    private int userId;
+    private String uuid;
     private String token;
     private Date expiresAt;
     private Date createdAt;

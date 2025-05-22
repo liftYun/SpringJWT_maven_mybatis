@@ -30,9 +30,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         return null;
     }
 
-    public UserDetails loadUserByUserId(int userId) throws UsernameNotFoundException {
+    public UserDetails loadUserByUuid(String uuid) throws UsernameNotFoundException {
 
-        UserEntity userData = userDao.findByUserId(userId);
+        UserEntity userData = userDao.findByUuid(uuid);
 
         if(userData != null) {
             return new CustomUserDetails(userData);

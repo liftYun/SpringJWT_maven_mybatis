@@ -12,7 +12,7 @@ import java.util.Date;
 @Builder
 public class IssueRefreshTokenDto {
     private int id;
-    private int userId;
+    private String uuid;
     private String token;
     private Date expires;
     private Date created;
@@ -20,7 +20,7 @@ public class IssueRefreshTokenDto {
     public static RefreshTokenEntity from(IssueRefreshTokenDto dto){
         return RefreshTokenEntity.builder()
                 .id(dto.id)
-                .userId(dto.userId)
+                .uuid(dto.uuid)
                 .token(dto.token)
                 .expiresAt(dto.expires)
                 .createdAt(dto.created)

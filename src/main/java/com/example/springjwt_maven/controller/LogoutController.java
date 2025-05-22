@@ -27,7 +27,7 @@ public class LogoutController {
             HttpServletResponse response
     ) {
         System.out.println("call LogoutController.logout");
-        refreshTokenService.deleteToken(user.getUserId());
+        refreshTokenService.deleteToken(user.getUserUuid());
         // 쿠키 만료 처리
         Cookie cookie = new Cookie("refreshToken", null);
         cookie.setHttpOnly(true);

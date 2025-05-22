@@ -7,6 +7,6 @@ import lombok.Setter;
 @Builder
 public class IssueRefreshTokenVo {
     private int id;
-    private int userId;
+    private String uuid;
     private String token;
 }

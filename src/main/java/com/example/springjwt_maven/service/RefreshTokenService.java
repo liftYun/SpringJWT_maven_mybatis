@@ -26,7 +26,7 @@ public class RefreshTokenService {
      * DB에 저장된 refresh token과 전달받은 토큰을 비교하고,
      * JWTUtil.isExpired로 만료 여부까지 검사합니다.
      */
-    public boolean isValid(int userId, String refreshToken) {
+    public boolean isValid(String uuid, String refreshToken) {
         // 1) 서명 및 만료(exp) 검증
         try {
             jwtUtil.parseClaims(refreshToken);
@@ -36,11 +36,12 @@ public class RefreshTokenService {
         }
 
         // 2) DB에서 현재 저장된 리프레시 토큰 조회
-        Optional<RefreshTokenEntity> tokenOpt = refreshTokenDao.findByUserId(userId);
+        Optional<RefreshTokenEntity> tokenOpt = refreshTokenDao.findByUuid(uuid);
         if (tokenOpt.isEmpty()) {
             return false;
         }
         RefreshTokenEntity entity = tokenOpt.get();
+        System.out.println("DB's token : " + entity);
 
 //        String storedToken = tokenOpt.get().getToken();
 //        System.out.println("[isValid] cookieToken='"+ refreshToken +"'");
@@ -52,9 +53,10 @@ public class RefreshTokenService {
         }
 
         // 4) DB에 기록된 만료 시간(expiredAt)으로도 한 번 더 만료 검증
+        System.out.println("expires at : "+entity.getExpiresAt());
         if (entity.getExpiresAt().before(new Date())) {
             // 만료된 토큰은 DB에서 삭제
-            refreshTokenDao.deleteByUserId(userId);
+            refreshTokenDao.deleteByUuid(uuid);
             return false;
         }
 
@@ -66,21 +68,21 @@ public class RefreshTokenService {
     /**
      * 로그아웃 등 필요 시 DB에서 refresh token 삭제
      */
-    public void deleteToken(int userId) {
-        refreshTokenDao.deleteByUserId(userId);
+    public void deleteToken(String uuid) {
+        refreshTokenDao.deleteByUuid(uuid);
     }
 
     /**
      * 로그인 시, 혹은 refresh 토큰 재발급 시 호출
      */
-    public void saveToken(int userId, String refreshToken) {
+    public void saveToken(String uuid, String refreshToken) {
         // 기존 토큰 삭제
-        refreshTokenDao.deleteByUserId(userId);
+        refreshTokenDao.deleteByUuid(uuid);
 
         // 새 토큰 저장
         System.out.println("Service's refreshToken= " + refreshToken);
-        System.out.println("Service's userId= "+ userId);
-        refreshTokenDao.insertRefreshToken(userId, refreshToken, new Date(System.currentTimeMillis() + jwtUtil.getRefreshExpiredMs()));
+        System.out.println("Service's userId= "+ uuid);
+        refreshTokenDao.insertRefreshToken(uuid, refreshToken, new Date(System.currentTimeMillis() + jwtUtil.getRefreshExpiredMs()));
     }
     /**
      * 토큰 탈취 대비한 블랙리스트 생성

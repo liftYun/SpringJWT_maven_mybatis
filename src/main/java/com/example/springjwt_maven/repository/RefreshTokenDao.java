@@ -14,7 +14,7 @@ public interface RefreshTokenDao {
     /**
      * refresh token 저장
      */
-    void insertRefreshToken(int userId, String refreshToken, Date expiresAt);
+    void insertRefreshToken(String uuid, String refreshToken, Date expiresAt);
 
     /**
      * refresh token 갱신
@@ -24,10 +24,10 @@ public interface RefreshTokenDao {
     /**
      * 주어진 username 으로 저장된 RefreshToken 조회
      */
-    Optional<RefreshTokenEntity> findByUserId(int userId);
+    Optional<RefreshTokenEntity> findByUuid(String uuid);
 
     /**
      * 주어진 username 으로 저장된 RefreshToken 레코드를 삭제
      */
-    void deleteByUserId(int userId);
+    void deleteByUuid(String uuid);
 }

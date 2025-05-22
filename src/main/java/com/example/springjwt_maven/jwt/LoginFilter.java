@@ -59,11 +59,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         System.out.println("CustomUserDetails:"+customUserDetails.getUserEmail());
         System.out.println("CustomUserDetails:"+customUserDetails.getUsername());
-        System.out.println("CustomUserDetails:"+customUserDetails.getUserId());
+        System.out.println("CustomUserDetails:"+customUserDetails.getUserUuid());
 
 //        String username =  customUserDetails.getUsername();
         String userEmail = customUserDetails.getUserEmail();
-        int userId = customUserDetails.getUserId();
+//        int userId = customUserDetails.getUserId();
+        String uuid = customUserDetails.getUserUuid();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -71,13 +72,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-        String accessToken = jwtUtil.createAccessToken(userId, userEmail, role);
-        String refreshToken = jwtUtil.createRefreshToken(userId);
+        String accessToken = jwtUtil.createAccessToken(uuid, userEmail, role);
+        String refreshToken = jwtUtil.createRefreshToken(uuid);
+        System.out.println("loginFiler's accessToken= " + accessToken);
         System.out.println("loginFiler's refreshToken= " + refreshToken);
-        System.out.println("loginFiler's userId = " + userId);
+        System.out.println("loginFiler's uuid = " + uuid);
 
         // Refresh Token 을 DB 혹은 Redis 등에 저장 (토큰 회수/무효화 위해)
-        refreshTokenService.saveToken(userId, refreshToken);
+        refreshTokenService.saveToken(uuid, refreshToken);
 
         response.addHeader("Authorization", "Bearer " + accessToken);
         // 보안성을 위해 HttpOnly Cookie 로 발급하는 것을 권장

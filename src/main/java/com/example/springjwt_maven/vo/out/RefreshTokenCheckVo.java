@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class RefreshTokenCheckVo {
     private int id;
-    private int userId;
+    private String uuid;
     private String token;
 }

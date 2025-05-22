@@ -6,57 +6,53 @@
 
     <resultMap id="refreshEntityMap" type="com.example.springjwt_maven.entity.RefreshTokenEntity">
         <id property="id" column="token_id"/>
-        <result property="userId" column="member_id"/>
+        <result property="uuid" column="member_uuid"/>
         <result property="token" column="token"/>
         <result property="expiresAt" column="expires_at"/>
         <result property="createdAt" column="created_at"/>
     </resultMap>
 
-    <select id="findByUserId" parameterType="int">
+    <select id="findByUuid" parameterType="String" resultMap="refreshEntityMap">
         SELECT
-        token_id        AS tokenId,
-        member_id        AS userId,
+        token_id,
+        member_uuid,
         token,
-        expires_at     AS expiresAt
-        created_at     AS createdAt
-        FROM refresh_token
-        WHERE member_id = #{userId}
+        expires_at,
+        created_at
+        FROM refresh_tokens
+        WHERE member_uuid = #{uuid}
     </select>
 
-    <select id="findByToken" parameterType="String">
+    <select id="findByToken" parameterType="String" resultMap="refreshEntityMap">
         SELECT
-        token_id        AS tokenId,
-        member_id        AS userId,
+        token_id        AS id,
+        member_uuid        AS uuid,
         token,
-        expires_at     AS expiresAt
+        expires_at     AS expiresAt,
         created_at     AS createdAt
-        FROM refresh_token
+        FROM refresh_tokens
         where token = #{token}
     </select>
 
-    <delete id="deleteByUserId" parameterType="int">
-        delete from refresh_token
-        where member_id = #{userId}
+    <delete id="deleteByUuid" parameterType="String">
+        delete from refresh_tokens
+        where member_uuid = #{uuid}
     </delete>
 
     <insert id="save" parameterType="com.example.springjwt_maven.entity.RefreshTokenEntity">
-        insert into refresh_token
-        values (id,#{userId},#{token})
+        insert into refresh_tokens
+        values (id,#{uuid},#{token})
     </insert>
-<!--    <insert id="save" parameterType="RefreshTokenEntity">-->
-<!--        insert into refresh_tokens-->
-<!--        values (id,#{userId},#{token})-->
-<!--    </insert>-->
 
     <insert id="insertRefreshToken" parameterType="map">
-        INSERT INTO refresh_token (member_id, token, expires_at)
-        VALUES (#{userId}, #{refreshToken}, #{expiresAt})
+        INSERT INTO refresh_tokens (member_uuid, token, expires_at)
+        VALUES (#{uuid}, #{refreshToken}, #{expiresAt})
     </insert>
     
     <update id="update" parameterType="com.example.springjwt_maven.entity.RefreshTokenEntity">
-        UPDATE refresh_token
+        UPDATE refresh_tokens
         SET token = #{token}
         expires_at = #{expiresAt}
-        WHERE member_id = #{userId}
+        WHERE member_uuid = #{uuid}
     </update>
 </mapper>

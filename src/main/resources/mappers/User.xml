@@ -6,7 +6,13 @@
 
     <resultMap id="userEntityMap" type="com.example.springjwt_maven.entity.UserEntity">
         <id property="id" column="member_id"/>
-        <result property="userEmail" column="email"/>
+        <result property="uuid"  column="member_uuid"/>
+        <result property="nickname"    column="name"/>
+        <result property="username"    column="membername"/>
+        <result property="userEmail"   column="email"/>
+        <result property="password"    column="password"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="role"        column="role"/>
     </resultMap>
 
     <select id="existsByUsername" parameterType="String" resultType="boolean">
@@ -16,21 +22,27 @@
     </select>
 
     <select id="findByUsername" parameterType="String" resultType="com.example.springjwt_maven.entity.UserEntity">
-        select member_id, membername, password, role
+        select member_id, member_uuid, membername, password, role
         from member
         where membername = #{username}
     </select>
 
     <select id="findByUserId" parameterType="int" resultType="com.example.springjwt_maven.entity.UserEntity">
-        select member_id, membername, password, role
+        select member_id, member_uuid, membername, password, role
         from member
         where member_id = #{userId}
     </select>
 
     <select id="findByUserEmail" parameterType="String" resultMap="userEntityMap">
-        select member_id, membername, email, password, role
+        select member_id, member_uuid, membername, email, password, role
         from member
         where email = #{userEmail}
+    </select>
+
+    <select id="findByUuid" parameterType="String" resultMap="userEntityMap">
+        select member_id, member_uuid, membername, email, password, role
+        from member
+        where member_uuid = #{uuid}
     </select>
 
     <insert id="registUser" parameterType="com.example.springjwt_maven.entity.UserEntity">

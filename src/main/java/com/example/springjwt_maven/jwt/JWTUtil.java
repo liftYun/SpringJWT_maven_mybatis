@@ -41,8 +41,8 @@ public class JWTUtil {
 //        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
 //    }
 
-    public int getUserId(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", Integer.class);
+    public String getUserUuid(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("uuid", String.class);
     }
 
     public String getUsername(String token) {
@@ -65,9 +65,9 @@ public class JWTUtil {
     }
 
 
-    public String createAccessToken(int userId, String userEmail, String role) {
+    public String createAccessToken(String uuid, String userEmail, String role) {
         return Jwts.builder()
-                .claim("userId", userId)
+                .claim("uuid", uuid)
                 .claim("username", userEmail)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -76,9 +76,9 @@ public class JWTUtil {
                 .compact();
     }
 
-    public String createRefreshToken(int userId) {
+    public String createRefreshToken(String uuid) {
         return Jwts.builder()
-                .claim("userId", userId)
+                .claim("uuid", uuid)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + refreshExpiredMs))
                 .signWith(secretKey)
