@@ -29,7 +29,7 @@ mybatis:
 
 
   type-aliases-package:
-    - com.example.springjwt_maven.entity
+    - com.**.entity
 
   configuration:
     map-underscore-to-camel-case: true

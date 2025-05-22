@@ -37,10 +37,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String password = obtainPassword(request);
 
 //        System.out.println("LoginFilter username : " + username);
-//        System.out.println("LoginFilter password : " + password);
-
+        System.out.println("LoginFilter userEmail : " + userEmail);
+        System.out.println("LoginFilter password : " + password);
+//        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userEmail, password, null);
+//        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken( "49", password, null);
+        System.out.println("LoginFilter authToken : " + authToken);
 //        System.out.println("authToken : " + authToken);
+
 
         return authenticationManager.authenticate(authToken);
     }
@@ -53,6 +57,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                                             Authentication authentication) throws IOException {
 
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        System.out.println("CustomUserDetails:"+customUserDetails.getUserEmail());
+        System.out.println("CustomUserDetails:"+customUserDetails.getUsername());
+        System.out.println("CustomUserDetails:"+customUserDetails.getUserId());
 
 //        String username =  customUserDetails.getUsername();
         String userEmail = customUserDetails.getUserEmail();
@@ -67,6 +74,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String accessToken = jwtUtil.createAccessToken(userId, userEmail, role);
         String refreshToken = jwtUtil.createRefreshToken(userId);
         System.out.println("loginFiler's refreshToken= " + refreshToken);
+        System.out.println("loginFiler's userId = " + userId);
 
         // Refresh Token 을 DB 혹은 Redis 등에 저장 (토큰 회수/무효화 위해)
         refreshTokenService.saveToken(userId, refreshToken);

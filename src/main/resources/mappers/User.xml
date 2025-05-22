@@ -4,6 +4,11 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.springjwt_maven.repository.UserDao">
 
+    <resultMap id="userEntityMap" type="com.example.springjwt_maven.entity.UserEntity">
+        <id property="id" column="member_id"/>
+        <result property="userEmail" column="email"/>
+    </resultMap>
+
     <select id="existsByUsername" parameterType="String" resultType="boolean">
         SELECT COUNT(*) > 0
         FROM member
@@ -11,15 +16,21 @@
     </select>
 
     <select id="findByUsername" parameterType="String" resultType="com.example.springjwt_maven.entity.UserEntity">
-        select id, username, password, role
+        select member_id, membername, password, role
         from member
         where membername = #{username}
     </select>
 
     <select id="findByUserId" parameterType="int" resultType="com.example.springjwt_maven.entity.UserEntity">
-        select id, username, password, role
+        select member_id, membername, password, role
         from member
-        where id = #{userId}
+        where member_id = #{userId}
+    </select>
+
+    <select id="findByUserEmail" parameterType="String" resultMap="userEntityMap">
+        select member_id, membername, email, password, role
+        from member
+        where email = #{userEmail}
     </select>
 
     <insert id="registUser" parameterType="com.example.springjwt_maven.entity.UserEntity">

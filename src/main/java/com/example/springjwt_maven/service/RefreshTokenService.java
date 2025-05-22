@@ -79,6 +79,7 @@ public class RefreshTokenService {
 
         // 새 토큰 저장
         System.out.println("Service's refreshToken= " + refreshToken);
+        System.out.println("Service's userId= "+ userId);
         refreshTokenDao.insertRefreshToken(userId, refreshToken, new Date(System.currentTimeMillis() + jwtUtil.getRefreshExpiredMs()));
     }
     /**
